@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Table from './Table'
+import fileDownload from 'js-file-download';
 import './App.css';
 import 'tachyons'
 
@@ -9,7 +10,8 @@ export class App extends Component {
     super();
     this.state = {
       shows: [{}],
-      headers: []
+      headers: ['Name', 'Network', 'Genres', 'Episode count', 'Released episodes count'],
+      reportType: 'Summary'
     }
   }
 
@@ -24,43 +26,68 @@ export class App extends Component {
         .then(res => {
           this.setState({ shows: res.table });
           this.setState({ headers: res.headers });
+          this.setState({ reportType: type})
         })
         .catch(e => console.log(e))
     }
 
     switch(type) {
       case 'Summary':
-        fetchInfo('http://localhost:3000/summary')
+        fetchInfo('http://localhost:3000/summary');
         break;
       case 'Next week':
-        fetchInfo('http://localhost:3000/nextWeek')
+        fetchInfo('http://localhost:3000/nextWeek');
         break;
       case 'Top 10':
-        console.log('yee');
+        fetchInfo('http://localhost:3000/top10');
         break;
       case 'Top networks':
-        console.log('yee');
+        fetchInfo('http://localhost:3000/topNetworks');
         break;
       case 'Best episode':
-        console.log('yee');
+        fetchInfo('http://localhost:3000/bestEpisode');
         break;
       case 'Recommended show':
-        console.log('yee');
+        fetchInfo('http://localhost:3000/recommended');
         break;
       default:
-        // code block
+        console.log('Invalid report');
+    }
+  }
+
+  handleDownload = () => {
+    const fetchFile = (target) => {
+      fetch(target)
+        .then(res => fileDownload(res, 'report.txt'))
+        .catch(e => console.log(e))
+    }
+    
+    switch(this.state.reportType) {
+      case 'Summary':
+        fetchFile('http://localhost:3000/summary/download');
+        break;
+      case 'Next week':
+        fetchFile('http://localhost:3000/nextWeek/download');
+        break;
+      case 'Top 10':
+        fetchFile('http://localhost:3000/top10/download');
+        break;
+      case 'Top networks':
+        fetchFile('http://localhost:3000/topNetworks/download');
+        break;
+      case 'Best episode':
+        fetchFile('http://localhost:3000/bestEpisode/download');
+        break;
+      case 'Recommended show':
+        fetchFile('http://localhost:3000/recommended/download');
+        break;
+      default:
+        console.log('Invalid report');
     }
   }
 
   render() {
-    const reportTypes = ['Summary', 'Next week', 'Top 10', 'Top networks', 'Best episode', 'Recommended show']
-    const headers = ['A', 'B', 'C']
-    let shows = [{
-      name: '1',
-      b: '2',
-      c: 'noe langt'
-    }]
-    const showProps = ['a', 'b', 'c']
+    const reportTypes = ['Summary', 'Next week', 'Top 10', 'Top networks', 'Best episode', 'Recommended show'];
 
     return (
       <div className="App">
@@ -73,17 +100,16 @@ export class App extends Component {
                 <select name="report-type" id="report-type" 
                   className='br2 h2 f6 bg-near-white dark-gray br1'
                   onChange={e => this.getReportTable(e.target.value)}>
-                  //w-100 db h2 f6 bg-near-white ba b--sliver gray
                   {
                     reportTypes.map((report, i) => {
                       return (<option key={i} value={report} className='avenir f2'>{report}</option>)
                     })
                   }
                 </select>
-                <button className='f6 link dim ba ph3 pv2 mb2 dib mid-gray ma3 br2'>Last ned</button>
+                <button className='f6 link dim ba ph3 pv2 mb2 dib mid-gray ma3 br2'
+                  onClick={this.handleDownload}>Last ned</button>
               </div>
-              <Table headers={this.state.headers} shows={this.state.shows} showProps={showProps} />
-              <p>Hei {this.state.shows.name}</p>
+              <Table headers={this.state.headers} shows={this.state.shows}s />
           </div>
       </div>
     )
