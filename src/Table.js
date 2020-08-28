@@ -1,7 +1,7 @@
 import React from 'react'
 
-function Table({ headers, shows, showProps }) {
-    showProps = Object.keys(shows[0]);
+function Table({ headers, shows }) {
+    //showProps = Object.keys(shows[0]);
 
     return (
         <div className="pa4">
