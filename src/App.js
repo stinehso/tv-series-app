@@ -22,7 +22,7 @@ export class App extends Component {
   }
 
   getReportTable = (type) => {
-    const root = 'http://tv-series-server.herokuapp.com/'
+    const root = 'https://tv-series-server.herokuapp.com/'
     const fetchInfo = (target) => {
       fetch(target)
         .then(res => res.json())
@@ -60,7 +60,7 @@ export class App extends Component {
   }
 
   handleDownload = () => {
-    const root = 'http://tv-series-server.herokuapp.com/'
+    const root = 'https://tv-series-server.herokuapp.com/'
     const fetchFile = (target) => {
       fetch(target)
         .then(res => fileDownload(res, 'report.txt'))
