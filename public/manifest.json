@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "TV series",
+  "name": "The TV series hub",
   "icons": [
     {
       "src": "favicon.ico",
