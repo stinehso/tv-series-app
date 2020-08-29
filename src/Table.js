@@ -1,7 +1,7 @@
 import React from 'react'
 
-function Table({ headers, shows }) {
-    //showProps = Object.keys(shows[0]);
+function Table({ headers, shows, sortBy }) {
+    const showProps = Object.keys(shows[0]);
 
     return (
         <div className="pa4">
@@ -12,8 +12,12 @@ function Table({ headers, shows }) {
                   {
                     headers.map((heading, i) => {
                       return (
-                        <th className="fw6 bb b--black-20 tl pb3 pr3 bg-white tc"
-                            id={`header${i}`}>{heading}</th>
+                        <th className="fw6 bb b--black-20 pb3 pr3 bg-white tc"
+                          key={`header${i}`}>
+                              <button className='fw6 bb-0 bl-0 bt-0 br-0 pb3 pr3 bg-white tc'
+                                onClick={e => sortBy(showProps[i])}>{heading}</button>
+                          </th>
+                          
                       )
                     })
                   }
@@ -26,7 +30,8 @@ function Table({ headers, shows }) {
                       <tr>
                         {
                           Object.keys(show).map((keyName, i) => (
-                            <td className="pv3 pr3 bb b--black-20 tc">{show[keyName]}</td>
+                            <td className="pv3 pr3 bb b--black-20 tc"
+                                key={`row${i}-${keyName}`}>{show[keyName]}</td>
                           ))
                         }
                       </tr>

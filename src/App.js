@@ -86,6 +86,24 @@ export class App extends Component {
     }
   }
 
+  sortBy = (key) => (a, b) => {
+    let result;
+    try {
+      result = a[key].localeCompare(b[key])
+    } catch (error) {
+      result = a[key]-b[key]
+    }
+    return result
+  }
+  
+
+  handleHeaderClick = (heading) => {
+    const showsCopy = this.state.shows
+    showsCopy.sort(this.sortBy(heading))
+    this.setState({ shows: showsCopy })
+  }
+
+
   render() {
     const reportTypes = ['Summary', 'Next week', 'Top 10', 'Top networks', 'Best episode', 'Recommended show'];
 
@@ -109,7 +127,7 @@ export class App extends Component {
                 <button className='f6 link dim ba ph3 pv2 mb2 dib mid-gray ma3 br2'
                   onClick={this.handleDownload}>Last ned</button>
               </div>
-              <Table headers={this.state.headers} shows={this.state.shows}s />
+              <Table headers={this.state.headers} shows={this.state.shows} sortBy={this.handleHeaderClick} />
           </div>
       </div>
     )
