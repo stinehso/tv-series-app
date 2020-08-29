@@ -11,12 +11,14 @@ export class App extends Component {
     this.state = {
       shows: [{}],
       headers: ['Name', 'Network', 'Genres', 'Episode count', 'Released episodes count'],
-      reportType: 'Summary'
+      reportType: 'Summary',
+      genresList: [],
+      filter: [],
     }
   }
 
   componentDidMount() {
-    this.getReportTable('Summary')
+    this.getReportTable('Summary');
   }
 
   getReportTable = (type) => {
@@ -27,6 +29,7 @@ export class App extends Component {
           this.setState({ shows: res.table });
           this.setState({ headers: res.headers });
           this.setState({ reportType: type})
+          this.setState({ filteredShows: res.table });
         })
         .catch(e => console.log(e))
     }
@@ -86,6 +89,8 @@ export class App extends Component {
     }
   }
 
+
+
   sortBy = (key) => (a, b) => {
     let result;
     try {
@@ -96,16 +101,53 @@ export class App extends Component {
     return result
   }
   
-
   handleHeaderClick = (heading) => {
-    const showsCopy = this.state.shows
-    showsCopy.sort(this.sortBy(heading))
-    this.setState({ shows: showsCopy })
+    const allShowsCopy = this.state.shows
+    allShowsCopy.sort(this.sortBy(heading))
+    this.setState({ shows: allShowsCopy })
+  }
+
+
+
+  findGenres = () => {
+    const genres = this.state.shows.map((show) => {
+      if (show.genres) {
+        return show.genres.split(', ')
+      }
+      return null
+    })
+    let unique = [...new Set(genres.flat())]; 
+    unique = unique.filter(genre => genre != null)
+    return unique
+  }
+
+  genreFilter = (show) => {
+    for (const genre of this.state.filter) {
+      if (show.genres.split(', ').includes(genre)) {
+        return true        
+      }
+    }
+    return false
+  }
+
+  handleGenreChange = (genre) => { 
+    let filterCopy = this.state.filter;
+    if (this.state.filter.includes(genre)) {
+      filterCopy = filterCopy.filter((val, i, arr) => val !== genre)
+      console.log(filterCopy, genre);
+      this.setState ({ filter: filterCopy })
+    } else {
+      filterCopy.push(genre)
+      this.setState ({ filter: filterCopy })
+    } 
   }
 
 
   render() {
     const reportTypes = ['Summary', 'Next week', 'Top 10', 'Top networks', 'Best episode', 'Recommended show'];
+    let genresList = this.state.genresList;
+    genresList = this.findGenres();
+    let filteredGenresShows = this.state.shows.filter(this.genreFilter);
 
     return (
       <div className="App">
@@ -127,7 +169,28 @@ export class App extends Component {
                 <button className='f6 link dim ba ph3 pv2 mb2 dib mid-gray ma3 br2'
                   onClick={this.handleDownload}>Last ned</button>
               </div>
-              <Table headers={this.state.headers} shows={this.state.shows} sortBy={this.handleHeaderClick} />
+              <h5 className='fw6'>Filtre</h5>
+              {
+                genresList !== undefined ?
+                genresList.map(genre => {
+                  return (
+                    <label className='avenir ph1'>
+                    <input
+                      name={genre}
+                      type="checkbox"
+                      checked={this.state.filter[genre]}
+                      onChange={e => this.handleGenreChange(genre)} />
+                    {genre}
+                  </label>
+                  )
+                })
+                : <React.Fragment></React.Fragment>
+              }
+              {
+                filteredGenresShows.length > 0  ?
+                <Table headers={this.state.headers} shows={filteredGenresShows} sortBy={this.handleHeaderClick} />
+                : <Table headers={this.state.headers} shows={this.state.shows} sortBy={this.handleHeaderClick} />
+              }
           </div>
       </div>
     )
