@@ -22,6 +22,7 @@ export class App extends Component {
   }
 
   getReportTable = (type) => {
+    const root = 'http://tv-series-server.herokuapp.com/'
     const fetchInfo = (target) => {
       fetch(target)
         .then(res => res.json())
@@ -36,22 +37,22 @@ export class App extends Component {
 
     switch(type) {
       case 'Summary':
-        fetchInfo('http://localhost:3000/summary');
+        fetchInfo(`${root}summary`);
         break;
       case 'Next week':
-        fetchInfo('http://localhost:3000/nextWeek');
+        fetchInfo(`${root}nextWeek`);
         break;
       case 'Top 10':
-        fetchInfo('http://localhost:3000/top10');
+        fetchInfo(`${root}top10`);
         break;
       case 'Top networks':
-        fetchInfo('http://localhost:3000/topNetworks');
+        fetchInfo(`${root}topNetworks`);
         break;
       case 'Best episode':
-        fetchInfo('http://localhost:3000/bestEpisode');
+        fetchInfo(`${root}bestEpisode`);
         break;
       case 'Recommended show':
-        fetchInfo('http://localhost:3000/recommended');
+        fetchInfo(`${root}recommended`);
         break;
       default:
         console.log('Invalid report');
@@ -59,6 +60,7 @@ export class App extends Component {
   }
 
   handleDownload = () => {
+    const root = 'http://tv-series-server.herokuapp.com/'
     const fetchFile = (target) => {
       fetch(target)
         .then(res => fileDownload(res, 'report.txt'))
@@ -67,22 +69,22 @@ export class App extends Component {
     
     switch(this.state.reportType) {
       case 'Summary':
-        fetchFile('http://localhost:3000/summary/download');
+        fetchFile(`${root}summary/download`);
         break;
       case 'Next week':
-        fetchFile('http://localhost:3000/nextWeek/download');
+        fetchFile(`${root}nextWeek/download`);
         break;
       case 'Top 10':
-        fetchFile('http://localhost:3000/top10/download');
+        fetchFile(`${root}top10/download`);
         break;
       case 'Top networks':
-        fetchFile('http://localhost:3000/topNetworks/download');
+        fetchFile(`${root}topNetworks/download`);
         break;
       case 'Best episode':
-        fetchFile('http://localhost:3000/bestEpisode/download');
+        fetchFile(`${root}bestEpisode/download`);
         break;
       case 'Recommended show':
-        fetchFile('http://localhost:3000/recommended/download');
+        fetchFile(`${root}recommended/download`);
         break;
       default:
         console.log('Invalid report');
