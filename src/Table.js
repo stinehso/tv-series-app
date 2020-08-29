@@ -14,10 +14,9 @@ function Table({ headers, shows, sortBy }) {
                       return (
                         <th className="fw6 bb b--black-20 pb3 pr3 bg-white tc"
                           key={`header${i}`}>
-                              <button className='fw6 bb-0 bl-0 bt-0 br-0 pb3 pr3 bg-white tc'
+                              <button className='fw6 bb-0 bl-0 bt-0 br-0 pb3 pr3 bg-white tc hover-black-50'
                                 onClick={e => sortBy(showProps[i])}>{heading}</button>
                           </th>
-                          
                       )
                     })
                   }
